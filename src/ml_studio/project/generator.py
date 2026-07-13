@@ -6,6 +6,7 @@ from .constants import PROJECTS_DIR, TEMPLATE_DIR
 from .file_utils import copy_directory, delete_directory
 from .placeholders import replace_all
 from .validator import validate_project
+from .uv_utils import sync_dependencies
 
 
 def generate_project(
@@ -13,6 +14,7 @@ def generate_project(
     project_description: str,
     author: str = "Alok Senapati",
     year: str = "2026",
+    sync: bool = False,
 ) -> Path:
     """
     Generate a new ML project from the template.
@@ -45,5 +47,8 @@ def generate_project(
         if destination.exists():
             delete_directory(destination)
         raise
+
+    if sync:
+        sync_dependencies(destination)
 
     return destination

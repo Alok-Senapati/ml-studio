@@ -34,6 +34,12 @@ def build_parser() -> argparse.ArgumentParser:
         default="2026",
     )
 
+    parser.add_argument(
+        "--sync",
+        action="store_true",
+        help="Install dependencies after project creation.",
+    )
+
     return parser
 
 
@@ -45,6 +51,7 @@ def main() -> None:
         project_description=args.description,
         author=args.author,
         year=args.year,
+        sync=args.sync
     )
 
     print()

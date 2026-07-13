@@ -240,4 +240,5 @@ logs-mlflow:
 new-project:
 	$(UV) run python -m ml_studio.project.cli \
 		--name $(NAME) \
-		--description "$(DESCRIPTION)"
+		--description "$(DESCRIPTION)" \
+		$(if $(SYNC),--sync,)
