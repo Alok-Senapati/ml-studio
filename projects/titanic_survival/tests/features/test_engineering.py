@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from titanic_survival.features.engineering import TitleExtractor
+from titanic_survival.features.engineering import TitleExtractor, TicketGroupSizeCreator
 from titanic_survival.features.engineering import FamilySizeCreator
 from titanic_survival.features.engineering import DeckExtractor
 from titanic_survival.features.engineering import TicketPrefixExtractor
@@ -94,3 +94,62 @@ def test_ticket_prefix_extractor():
     result = transformer.fit_transform(df)
 
     assert list(result["TicketPrefix"]) == ["A5", "PC", "STONO2", "NONE"]
+
+
+def test_ticket_group_size_creator():
+    df = pd.DataFrame(
+        {
+            "Ticket": [
+                "PC17599",
+                "PC17599",
+                "113803",
+                "347082",
+                "347082",
+                "347082",
+            ]
+        }
+    )
+
+    transformer = TicketGroupSizeCreator(
+        ticket_column="Ticket",
+        output_column="TicketGroupSize",
+    )
+
+    result = transformer.fit_transform(df)
+
+    assert list(result["TicketGroupSize"]) == [
+        2,
+        2,
+        1,
+        3,
+        3,
+        3,
+    ]
+
+
+def test_ticket_group_size_unseen_ticket():
+    train_df = pd.DataFrame(
+        {
+            "Ticket": [
+                "A",
+                "A",
+                "B",
+            ]
+        }
+    )
+
+    test_df = pd.DataFrame(
+        {
+            "Ticket": [
+                "A",
+                "C",
+            ]
+        }
+    )
+
+    transformer = TicketGroupSizeCreator()
+    transformer.fit(train_df)
+
+    result = transformer.transform(test_df)
+
+    assert list(result["TicketGroupSize"]) == [2, 1]

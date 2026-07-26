@@ -3,6 +3,8 @@ from __future__ import annotations
 import pandas as pd
 
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.utils.validation import check_is_fitted
+
 
 class TitleExtractor(BaseEstimator, TransformerMixin):
     """Extract passenger title from the Name column."""
@@ -119,5 +121,31 @@ class TicketPrefixExtractor(BaseEstimator, TransformerMixin):
         )
 
         X[self.output_column] = X[self.output_column].where(~X[self.output_column].str.isnumeric(), self.no_prefix_value)
+
+        return X
+
+
+class TicketGroupSizeCreator(BaseEstimator, TransformerMixin):
+    """Calculates and Populates TicketGroupSize"""
+    def __init__(self, ticket_column: str = "Ticket", output_column: str = "TicketGroupSize") -> None:
+        self.ticket_column = ticket_column
+        self.output_column = output_column
+
+
+    def fit(self, X: pd.DataFrame, y: pd.Series | None = None) -> TicketGroupSizeCreator:
+        self.ticket_counts_ = X[self.ticket_column].value_counts().to_dict()
+
+        return self
+
+
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        check_is_fitted(self, "ticket_counts_")
+        X = X.copy()
+
+        X[self.output_column] = (
+            X[self.ticket_column]
+            .map(self.ticket_counts_.get)
+            .fillna(1).astype(int)
+        )
 
         return X
