@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from titanic_survival.pipelines.preprocessing import feature_engineering_pipeline
+from titanic_survival.pipelines.engineering import feature_engineering_pipeline
 
 
 def test_feature_engineering_pipeline():
@@ -65,7 +65,7 @@ def test_feature_engineering_pipeline_fit_transform_consistency():
     result1 = feature_engineering_pipeline.fit_transform(df.copy())
 
     # fit then transform on new pipeline instance
-    from titanic_survival.pipelines.preprocessing import feature_engineering_pipeline as pipeline2
+    from titanic_survival.pipelines.engineering import feature_engineering_pipeline as pipeline2
     pipeline2.fit(df.copy())
     result2 = pipeline2.transform(df.copy())
 
