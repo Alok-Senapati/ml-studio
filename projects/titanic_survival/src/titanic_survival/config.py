@@ -22,7 +22,7 @@ class TrainingConfig(BaseModel):
 class LogisticRegressionConfig(BaseModel):
     max_iter: int = 1000
     solver: str = "lbfgs"
-    penalty: str = "l2"
+    l1_ratio: float = 0.0
     C: float = 1.0
 
 class DecisionTreeConfig(BaseModel):
