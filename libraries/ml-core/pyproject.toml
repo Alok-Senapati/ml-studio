@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ml-core"
+version = "0.1.0"
+description = "Educational machine learning library built from scratch."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+
+authors = [
+    { name = "Alok Senapati" }
+]
+
+dependencies = [
+    "numpy>=2.3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4",
+    "pytest-cov>=7.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ml_core"]

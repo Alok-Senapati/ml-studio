@@ -1,14 +1,9 @@
 [project]
 name = "ml-studio"
-version = "1.0.0"
+version = "0.1.0"
 description = "ML Engineering Platform & Projects"
 readme = "README.md"
 requires-python = ">=3.12"
-
-dependencies = [
-    "jupyterlab>=4.6.1",
-    "pandas-stubs~=3.0.3",
-]
 
 [dependency-groups]
 dev = [
@@ -18,9 +13,17 @@ dev = [
     "pre-commit>=4.2",
 ]
 
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = [
+    "libraries/*",
+    "projects/*",
+]
+
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["src"]
+testpaths = []
 
 [tool.ruff]
 line-length = 100
@@ -32,6 +35,3 @@ select = ["E", "F", "I", "UP", "B"]
 [tool.mypy]
 python_version = "3.12"
 ignore_missing_imports = true
-
-[tool.uv]
-package = true
