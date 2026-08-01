@@ -19,7 +19,7 @@ def test_training_pipeline_predict(sample_training_data, sample_training_labels)
         sample_training_labels,
         test_size=settings.training.test_size,
         random_state=settings.common.random_seed,
-        stratify=sample_training_labels
+        stratify=sample_training_labels,
     )
 
     training_pipeline.fit(X_train, y_train)
@@ -37,7 +37,7 @@ def test_training_pipeline_predict_proba(sample_training_data, sample_training_l
         sample_training_labels,
         test_size=settings.training.test_size,
         random_state=settings.common.random_seed,
-        stratify=sample_training_labels
+        stratify=sample_training_labels,
     )
 
     training_pipeline.fit(X_train, y_train)
@@ -47,4 +47,3 @@ def test_training_pipeline_predict_proba(sample_training_data, sample_training_l
     assert (probabilities >= 0).all() and (probabilities <= 1).all()
     # Sum of probabilities for each sample should be close to 1
     np.testing.assert_array_almost_equal(probabilities.sum(axis=1), 1.0)
-

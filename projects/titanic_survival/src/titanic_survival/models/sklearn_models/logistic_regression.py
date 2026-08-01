@@ -8,5 +8,5 @@ logistic_regression = LogisticRegression(
     solver=config.solver,
     C=config.C,
     l1_ratio=config.l1_ratio,
-    random_state=settings.common.random_seed
+    random_state=settings.common.random_seed,
 )

@@ -5,16 +5,12 @@ from sklearn.preprocessing import OneHotEncoder
 
 from titanic_survival.pipelines.engineering import feature_engineering_pipeline
 
-numeric_pipeline = Pipeline(
-    steps=[
-        ("imputer", SimpleImputer(strategy="median"))
-    ]
-)
+numeric_pipeline = Pipeline(steps=[("imputer", SimpleImputer(strategy="median"))])
 
 categorical_pipeline = Pipeline(
     steps=[
         ("imputer", SimpleImputer(strategy="most_frequent")),
-        ("encoder", OneHotEncoder(handle_unknown="ignore"))
+        ("encoder", OneHotEncoder(handle_unknown="ignore")),
     ]
 )
 
@@ -23,23 +19,12 @@ categorical_features = ["Sex", "Embarked", "Title", "Deck", "TicketPrefix", "IsA
 
 preprocessor = ColumnTransformer(
     transformers=[
-        (
-            "numeric",
-            numeric_pipeline,
-            numeric_features
-        ),
-        (
-            "categorical",
-            categorical_pipeline,
-            categorical_features
-        )
+        ("numeric", numeric_pipeline, numeric_features),
+        ("categorical", categorical_pipeline, categorical_features),
     ],
-    remainder="drop"
+    remainder="drop",
 )
 
 training_preprocessor = Pipeline(
-    steps=[
-        ("feature_engineering", feature_engineering_pipeline),
-        ("preprocessing", preprocessor)
-    ]
+    steps=[("feature_engineering", feature_engineering_pipeline), ("preprocessing", preprocessor)]
 )

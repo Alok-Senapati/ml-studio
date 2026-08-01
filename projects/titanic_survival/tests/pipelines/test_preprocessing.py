@@ -3,6 +3,7 @@ import pandas as pd
 
 from titanic_survival.pipelines.preprocessing import training_preprocessor
 
+
 def test_training_preprocessor_transforms_data(sample_training_data):
     """Test that training_preprocessor transforms data successfully."""
     result = training_preprocessor.fit_transform(sample_training_data.copy())
@@ -10,6 +11,7 @@ def test_training_preprocessor_transforms_data(sample_training_data):
     # Check output is a numpy array or sparse matrix
     assert hasattr(result, "shape")
     assert result.shape[0] == len(sample_training_data)
+
 
 def test_training_preprocessor_handles_missing_age(sample_training_data):
     """Test that missing Age values are imputed with median."""
@@ -23,12 +25,13 @@ def test_training_preprocessor_handles_missing_age(sample_training_data):
 
     assert not np.isnan(result_array).any()
 
+
 def test_training_preprocessor_creates_engineered_features(sample_training_data):
     """Test that feature engineering creates expected columns."""
     # Get intermediate output after feature engineering
-    feature_engineered = training_preprocessor.named_steps[
-        "feature_engineering"
-    ].fit_transform(sample_training_data.copy())
+    feature_engineered = training_preprocessor.named_steps["feature_engineering"].fit_transform(
+        sample_training_data.copy()
+    )
 
     # Check for engineered features
     assert "Title" in feature_engineered.columns
@@ -37,6 +40,7 @@ def test_training_preprocessor_creates_engineered_features(sample_training_data)
     assert "Deck" in feature_engineered.columns
     assert "TicketPrefix" in feature_engineered.columns
     assert "TicketGroupSize" in feature_engineered.columns
+
 
 def test_training_preprocessor_fit_transform_consistency(sample_training_data):
     """Test that fit_transform and fit().transform() produce same results."""
@@ -48,6 +52,7 @@ def test_training_preprocessor_fit_transform_consistency(sample_training_data):
 
     # fit then transform
     from titanic_survival.pipelines.preprocessing import training_preprocessor as pipeline2
+
     pipeline2.fit(data_copy2)
     result2 = pipeline2.transform(data_copy2)
 
@@ -63,6 +68,7 @@ def test_training_preprocessor_fit_transform_consistency(sample_training_data):
         result2_array = result2
 
     np.testing.assert_array_almost_equal(result1_array, result2_array)
+
 
 def test_training_preprocessor_handles_all_missing_values():
     """Test that pipeline handles columns with all missing values."""
@@ -87,6 +93,7 @@ def test_training_preprocessor_handles_all_missing_values():
     # Should not raise error
     assert result.shape[0] == len(data_with_missing)
 
+
 def test_training_preprocessor_output_shape(sample_training_data):
     """Test that output has correct number of samples."""
     result = training_preprocessor.fit_transform(sample_training_data.copy())
@@ -98,6 +105,7 @@ def test_training_preprocessor_output_shape(sample_training_data):
 
     # Number of rows should match input
     assert result_array.shape[0] == len(sample_training_data)
+
 
 def test_training_preprocessor_handle_unknown_category(sample_training_data):
     training_preprocessor.fit(sample_training_data.copy())

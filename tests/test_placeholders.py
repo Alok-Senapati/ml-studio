@@ -8,9 +8,7 @@ def test_replace_all(tmp_path: Path) -> None:
     project.mkdir()
 
     readme = project / "README.md"
-    readme.write_text(
-        "__PROJECT_NAME__\n__PROJECT_DESCRIPTION__"
-    )
+    readme.write_text("__PROJECT_NAME__\n__PROJECT_DESCRIPTION__")
 
     replace_all(
         tmp_path,

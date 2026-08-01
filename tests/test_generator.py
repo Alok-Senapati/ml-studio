@@ -14,9 +14,7 @@ def test_generate_project(monkeypatch, tmp_path: Path) -> None:
     project_dir.mkdir()
 
     readme = project_dir / "README.md"
-    readme.write_text(
-        "__PROJECT_NAME__\n__PROJECT_DESCRIPTION__"
-    )
+    readme.write_text("__PROJECT_NAME__\n__PROJECT_DESCRIPTION__")
 
     monkeypatch.setattr(
         "ml_studio.project.generator.TEMPLATE_DIR",
@@ -36,10 +34,6 @@ def test_generate_project(monkeypatch, tmp_path: Path) -> None:
     assert output.exists()
     assert output.name == "customer_churn"
 
-    content = (
-        output
-        / "customer_churn"
-        / "README.md"
-    ).read_text()
+    content = (output / "customer_churn" / "README.md").read_text()
 
     assert "customer_churn" in content

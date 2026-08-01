@@ -56,14 +56,7 @@ def test_invalid_identifier(
 
 @pytest.mark.parametrize(
     "name",
-    [
-        "class",
-        "for",
-        "while",
-        "match",
-        "import",
-        "case"
-    ],
+    ["class", "for", "while", "match", "import", "case"],
 )
 def test_python_keywords(
     name: str,

@@ -6,7 +6,7 @@ from titanic_survival.features.engineering import (
     IsAloneCreator,
     DeckExtractor,
     TicketGroupSizeCreator,
-    TicketPrefixExtractor
+    TicketPrefixExtractor,
 )
 
 feature_engineering_pipeline = Pipeline(
@@ -19,4 +19,3 @@ feature_engineering_pipeline = Pipeline(
         ("ticket_group_size_creator", TicketGroupSizeCreator()),
     ]
 )
-

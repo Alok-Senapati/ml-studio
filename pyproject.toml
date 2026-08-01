@@ -4,10 +4,13 @@ version = "0.1.0"
 description = "ML Engineering Platform & Projects"
 readme = "README.md"
 requires-python = ">=3.12"
+dependencies = [
+]
 
 [dependency-groups]
 dev = [
     "pytest>=8.4",
+    "pytest-cov>=7.0",
     "ruff>=0.12",
     "mypy>=1.17",
     "pre-commit>=4.2",
@@ -23,7 +26,13 @@ members = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = []
+testpaths = ["src", "tests", "libraries", "projects"]
+
+pythonpath = [
+    "src",
+    "libraries/*/src",
+    "projects/*/src"
+]
 
 [tool.ruff]
 line-length = 100
