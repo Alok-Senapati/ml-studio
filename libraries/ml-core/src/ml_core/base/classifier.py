@@ -2,14 +2,13 @@ from __future__ import annotations
 
 from abc import abstractmethod
 
-import numpy as np
-
 from ml_core.base.estimator import Estimator
+from ml_core.typing import FloatArray, NumericArray
 
 
 class Classifier(Estimator):
-    """Base interface for all classifiers"""
+    """Base interface for all classification estimators."""
 
     @abstractmethod
-    def predict_proba(self, X: np.ndarray) -> np.ndarray:
-        """Return prediction probabilities"""
+    def predict_proba(self, X: NumericArray) -> FloatArray:
+        """Predict class probabilities for the given feature matrix."""
