@@ -16,6 +16,8 @@ authors = [
 
 dependencies = [
     "numpy>=2.3",
+    "pandas>=2.2",
+    "matplotlib>=3.11.0",
 ]
 
 [dependency-groups]
@@ -24,5 +26,12 @@ dev = [
     "pytest-cov>=7.0",
 ]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/ml_core"]
+
+[tool.uv]
+package = true
