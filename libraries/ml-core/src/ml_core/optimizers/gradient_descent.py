@@ -31,4 +31,4 @@ def gradient_descent(
     weights_updated = weights - (learning_rate * dw)
     bias_updated = bias - (learning_rate * db)
 
-    return weights_updated, bias
+    return weights_updated, bias_updated

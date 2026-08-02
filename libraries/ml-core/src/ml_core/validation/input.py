@@ -16,7 +16,7 @@ def check_feature_matrix(X: NumericArray) -> None:
     """
 
     if X.ndim != 2:
-        raise ValueError(f"Expected X to be a 2D array, got {X.ndim} dimensions")
+        raise ValueError(f"Expected a 2D feature matrix, got array with {X.ndim} dimension.")
 
 
 def check_target_vector(y: NumericArray) -> None:
@@ -59,9 +59,9 @@ def check_binary_labels(y: NumericArray) -> None:
         Target Vector
     """
 
-    labels = np.unique(y)
+    labels = set(np.unique(y))
 
-    if not np.array_equal(labels, np.array([0, 1])):
+    if not labels.issubset({0, 1}):
         raise ValueError("Binary labels must contain only 0 and 1")
 
 
@@ -79,4 +79,5 @@ def check_matching_target_vectors(y_true: NumericArray, y_pred: NumericArray) ->
     check_target_vector(y_true)
     check_target_vector(y_pred)
 
-    check_same_length(y_true, y_pred)
+    if y_true.shape[0] != y_pred.shape[0]:
+        raise ValueError("y_true and y_pred contains different number of samples.")

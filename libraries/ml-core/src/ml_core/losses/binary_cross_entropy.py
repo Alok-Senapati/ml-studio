@@ -27,12 +27,11 @@ def binary_cross_entropy(y_true: NumericArray, y_pred: NumericArray) -> float:
     y_true_float = np.asarray(y_true, dtype=np.float64)
     y_pred_float = np.asarray(y_pred, dtype=np.float64)
 
-    check_matching_target_vectors(y_true, y_pred)
+    check_matching_target_vectors(y_true_float, y_pred_float)
 
-    # Values <= EPSILON become EPSILON
-    # Values >= 1 - EPSILON become (1 - EPSILON)
-    # As log(0) and log(1) evaluates to -inf which results in NaN during evaluation
-    # Hence 0 become 1e-15 and 1 becomes 0.999999999999999
+    # Prevent extreme probabilities (0.0 or 1.0) from causing log(0) = -inf,
+    # which leads to NaN values in binary cross-entropy loss calculation.
+    # Example: Maps [0.0, 1.0] -> [1e-15, 0.999999999999999]
     y_pred_clipped = np.clip(y_pred_float, EPSILON, 1 - EPSILON)
 
     loss = -(
