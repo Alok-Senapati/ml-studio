@@ -10,7 +10,7 @@ numeric_pipeline = Pipeline(steps=[("imputer", SimpleImputer(strategy="median"))
 categorical_pipeline = Pipeline(
     steps=[
         ("imputer", SimpleImputer(strategy="most_frequent")),
-        ("encoder", OneHotEncoder(handle_unknown="ignore")),
+        ("encoder", OneHotEncoder(handle_unknown="ignore", sparse_output=True)),
     ]
 )
 
