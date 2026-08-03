@@ -41,4 +41,7 @@ def test_replace_placeholders_skips_binary_files(tmp_path: Path) -> None:
     # should not raise and binary file content should remain unchanged
     replace_all(tmp_path, placeholders)
 
-    assert binary_file.read_bytes() == b"\xff\xff\xff"
+    # the directory will be renamed, so check the new location
+    new_file = tmp_path / "customer_churn" / "image.png"
+    assert new_file.exists()
+    assert new_file.read_bytes() == b"\xff\xff\xff"
