@@ -19,7 +19,7 @@ def test_training_preprocessor_handles_missing_age(sample_training_data):
 
     # Result should have no NaN values
     if hasattr(result, "toarray"):
-        result_array = result.toarray()
+        result_array = result.toarray()  # pragma: no cover
     else:
         result_array = result
 
@@ -58,12 +58,12 @@ def test_training_preprocessor_fit_transform_consistency(sample_training_data):
 
     # Convert to dense arrays for comparison
     if hasattr(result1, "toarray"):
-        result1_array = result1.toarray()
+        result1_array = result1.toarray()  # pragma: no cover
     else:
         result1_array = result1
 
     if hasattr(result2, "toarray"):
-        result2_array = result2.toarray()
+        result2_array = result2.toarray()  # pragma: no cover
     else:
         result2_array = result2
 
@@ -99,7 +99,7 @@ def test_training_preprocessor_output_shape(sample_training_data):
     result = training_preprocessor.fit_transform(sample_training_data.copy())
 
     if hasattr(result, "toarray"):
-        result_array = result.toarray()
+        result_array = result.toarray()  # pragma: no cover
     else:
         result_array = result
 
