@@ -77,3 +77,11 @@ def test_delete_directory(tmp_path: Path) -> None:
     delete_directory(directory)
 
     assert not directory.exists()
+
+
+def test_is_text_file_binary(tmp_path: Path) -> None:
+    # create a file with invalid UTF-8 bytes to trigger UnicodeDecodeError
+    file = tmp_path / "binary.bin"
+    file.write_bytes(b"\xff\xff\xff\xff")
+
+    assert not is_text_file(file)
