@@ -1,74 +1,80 @@
+"""
+Unit tests for the accuracy metric evaluation function.
+"""
+
+from __future__ import annotations
+
 import numpy as np
 from ml_core.metrics.accuracy import accuracy
 
 
-def test_accuracy_perfect_predictions():
-    """Test accuracy with perfect predictions."""
+def test_accuracy_perfect_predictions() -> None:
+    """Test accuracy calculation with 100% correct predictions."""
     y_true = np.array([0, 1, 1, 0, 1])
     y_pred = np.array([0, 1, 1, 0, 1])
     acc = accuracy(y_true, y_pred)
     assert np.isclose(acc, 1.0)
 
 
-def test_accuracy_all_wrong():
-    """Test accuracy with all wrong predictions."""
+def test_accuracy_all_wrong() -> None:
+    """Test accuracy calculation with 0% correct predictions."""
     y_true = np.array([0, 1, 1, 0, 1])
     y_pred = np.array([1, 0, 0, 1, 0])
     acc = accuracy(y_true, y_pred)
     assert np.isclose(acc, 0.0)
 
 
-def test_accuracy_half_correct():
-    """Test accuracy with half correct predictions."""
+def test_accuracy_half_correct() -> None:
+    """Test accuracy calculation with 50% correct predictions."""
     y_true = np.array([0, 1, 0, 1])
     y_pred = np.array([0, 1, 1, 0])
     acc = accuracy(y_true, y_pred)
     assert np.isclose(acc, 0.5)
 
 
-def test_accuracy_single_sample():
-    """Test accuracy with single sample."""
+def test_accuracy_single_sample() -> None:
+    """Test accuracy calculation with a single sample array."""
     y_true = np.array([1])
     y_pred = np.array([1])
     acc = accuracy(y_true, y_pred)
     assert np.isclose(acc, 1.0)
 
 
-def test_accuracy_multiclass_perfect():
-    """Test accuracy with perfect multiclass predictions."""
+def test_accuracy_multiclass_perfect() -> None:
+    """Test accuracy calculation with perfect multiclass predictions."""
     y_true = np.array([0, 1, 2, 0, 1, 2])
     y_pred = np.array([0, 1, 2, 0, 1, 2])
     acc = accuracy(y_true, y_pred)
     assert np.isclose(acc, 1.0)
 
 
-def test_accuracy_multiclass_partial():
-    """Test accuracy with partial multiclass predictions."""
+def test_accuracy_multiclass_partial() -> None:
+    """Test accuracy calculation with partial multiclass predictions."""
     y_true = np.array([0, 1, 2, 0, 1, 2])
     y_pred = np.array([0, 1, 2, 1, 1, 0])
     acc = accuracy(y_true, y_pred)
-    expected = 4 / 6  # 4 correct out of 6
+    expected = 4.0 / 6.0  # 4 correct out of 6
     assert np.isclose(acc, expected)
 
 
-def test_accuracy_multiclass_all_wrong():
-    """Test accuracy with all wrong multiclass predictions."""
+def test_accuracy_multiclass_all_wrong() -> None:
+    """Test accuracy calculation with completely wrong multiclass predictions."""
     y_true = np.array([0, 1, 2, 0, 1, 2])
     y_pred = np.array([1, 2, 0, 2, 0, 1])
     acc = accuracy(y_true, y_pred)
     assert np.isclose(acc, 0.0)
 
 
-def test_accuracy_range():
-    """Test accuracy is always between 0 and 1."""
+def test_accuracy_range() -> None:
+    """Test that accuracy output is always bounded in range [0.0, 1.0]."""
     y_true = np.array([0, 1, 0, 1, 0, 1])
     y_pred = np.array([0, 1, 1, 0, 0, 1])
     acc = accuracy(y_true, y_pred)
     assert 0.0 <= acc <= 1.0
 
 
-def test_accuracy_symmetry():
-    """Test accuracy is symmetric for binary case."""
+def test_accuracy_symmetry() -> None:
+    """Test accuracy symmetry for binary cases."""
     y_true = np.array([0, 1])
     y_pred1 = np.array([1, 0])
     y_pred2 = np.array([0, 1])
@@ -80,63 +86,63 @@ def test_accuracy_symmetry():
     assert np.isclose(acc2, 1.0)
 
 
-def test_accuracy_large_dataset():
-    """Test accuracy with larger dataset."""
+def test_accuracy_large_dataset() -> None:
+    """Test accuracy calculation on a larger randomized dataset."""
     n_samples = 1000
     y_true = np.random.randint(0, 3, n_samples)
     y_pred = y_true.copy()
-    y_pred[0:100] = (y_pred[0:100] + 1) % 3  # Flip 100 predictions
+    y_pred[0:100] = (y_pred[0:100] + 1) % 3  # Intentionally flip 100 predictions
     acc = accuracy(y_true, y_pred)
-    expected = 900 / 1000
+    expected = 900.0 / 1000.0
     assert np.isclose(acc, expected)
 
 
-def test_accuracy_float_inputs():
-    """Test accuracy with float inputs."""
+def test_accuracy_float_inputs() -> None:
+    """Test accuracy calculation with floating-point label arrays."""
     y_true = np.array([0.0, 1.0, 1.0, 0.0])
     y_pred = np.array([0.0, 1.0, 0.0, 0.0])
     acc = accuracy(y_true, y_pred)
-    expected = 3 / 4
+    expected = 3.0 / 4.0
     assert np.isclose(acc, expected)
 
 
-def test_accuracy_list_inputs():
-    """Test accuracy with list inputs."""
-    y_true = np.array([0, 1, 1, 0])
-    y_pred = np.array([0, 1, 0, 0])
+def test_accuracy_list_inputs() -> None:
+    """Test accuracy calculation with Python list inputs."""
+    y_true = [0, 1, 1, 0]
+    y_pred = [0, 1, 0, 0]
     acc = accuracy(y_true, y_pred)
-    expected = 3 / 4
+    expected = 3.0 / 4.0
     assert np.isclose(acc, expected)
 
 
-def test_accuracy_return_type():
-    """Test accuracy returns float."""
+def test_accuracy_return_type() -> None:
+    """Test that accuracy returns a standard Python float."""
     y_true = np.array([0, 1, 1, 0])
     y_pred = np.array([0, 1, 1, 0])
     acc = accuracy(y_true, y_pred)
     assert isinstance(acc, float)
 
 
-def test_accuracy_single_class():
-    """Test accuracy with all same labels."""
+def test_accuracy_single_class() -> None:
+    """Test accuracy calculation when all samples belong to the same class."""
     y_true = np.array([1, 1, 1, 1])
     y_pred = np.array([1, 1, 1, 1])
     acc = accuracy(y_true, y_pred)
     assert np.isclose(acc, 1.0)
 
 
-def test_accuracy_many_classes():
-    """Test accuracy with many different classes."""
+def test_accuracy_many_classes() -> None:
+    """Test accuracy calculation with many distinct class labels."""
     y_true = np.arange(100)
     y_pred = np.arange(100)
     acc = accuracy(y_true, y_pred)
     assert np.isclose(acc, 1.0)
 
 
-def test_accuracy_boolean_labels():
-    """Test accuracy with boolean labels."""
+def test_accuracy_boolean_labels() -> None:
+    """Test accuracy calculation with boolean arrays."""
     y_true = np.array([True, False, True, False])
     y_pred = np.array([True, False, False, False])
     acc = accuracy(y_true, y_pred)
-    expected = 3 / 4
+    expected = 3.0 / 4.0
     assert np.isclose(acc, expected)

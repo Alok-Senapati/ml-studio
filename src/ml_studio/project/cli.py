@@ -1,51 +1,72 @@
+"""
+Command Line Interface (CLI) entry point for ml-studio project generation.
+"""
+
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 
-from .generator import generate_project
 from .exceptions import ProjectGeneratorError
+from .generator import generate_project
 from .logger import logger
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """
+    Construct the command line argument parser for `ml-studio`.
+
+    Returns
+    -------
+    argparse.ArgumentParser
+        Configured argument parser instance with all CLI options.
+    """
     parser = argparse.ArgumentParser(
         prog="ml-studio",
-        description="Generate a new ML project.",
+        description="Generate a new production-ready ML project template.",
     )
 
     parser.add_argument(
         "--name",
         required=True,
-        help="Project name (snake_case)",
+        help="Project name in snake_case format.",
     )
 
     parser.add_argument(
         "--description",
         required=True,
-        help="Project description",
+        help="Brief description of the machine learning project.",
     )
 
     parser.add_argument(
         "--author",
         default="Alok Senapati",
+        help="Author name for package metadata.",
     )
 
     parser.add_argument(
         "--year",
         default="2026",
+        help="Copyright year for license header.",
     )
 
     parser.add_argument(
         "--sync",
         action="store_true",
-        help="Install dependencies after project creation.",
+        help="Automatically install project dependencies after creation using uv.",
     )
 
     return parser
 
 
 def main() -> None:
+    """
+    Main CLI entry point function executing project generator command.
+
+    Raises
+    ------
+    SystemExit
+        Exits with code 1 if project creation fails due to validation errors.
+    """
     args = build_parser().parse_args()
 
     try:
@@ -63,7 +84,7 @@ def main() -> None:
         logger.error("")
         logger.error("Project creation failed")
         logger.error(str(exc))
-        raise SystemExit(1)
+        raise SystemExit(1) from exc
 
     logger.info("")
     logger.info("Project created successfully")

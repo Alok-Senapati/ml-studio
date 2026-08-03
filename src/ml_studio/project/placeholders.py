@@ -1,3 +1,7 @@
+"""
+Placeholder substitution logic for paths and file text content during scaffolding.
+"""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -17,15 +21,24 @@ def replace_placeholders_in_content(
     placeholders: dict[str, str],
 ) -> None:
     """
-    Replace placeholders inside every text file.
-    """
+    Replace placeholder tokens inside all text files under the root directory.
 
+    Parameters
+    ----------
+    root : Path
+        Root path of the scaffolded project directory.
+    placeholders : dict[str, str]
+        Dictionary mapping placeholder key strings to replacement values.
+    """
+    # Iterate through all regular files under root directory
     for file in find_files(root):
+        # Skip binary files to prevent encoding corruption
         if not is_text_file(file):
             continue
 
         content = read_text(file)
 
+        # Substitute each placeholder key with its concrete value
         for placeholder, value in placeholders.items():
             content = content.replace(placeholder, value)
 
@@ -37,11 +50,21 @@ def replace_placeholders_in_paths(
     placeholders: dict[str, str],
 ) -> None:
     """
-    Rename directories and files containing placeholders.
+    Rename directory and file paths containing placeholder tokens.
 
-    Deepest paths are renamed first to avoid invalid parent paths.
+    Parameters
+    ----------
+    root : Path
+        Root path of the scaffolded project directory.
+    placeholders : dict[str, str]
+        Dictionary mapping placeholder key strings to replacement values.
+
+    Notes
+    -----
+    Deepest paths (longest path parts) are renamed first to avoid invalidating parent
+    directory path references during traversal.
     """
-
+    # Sort paths in descending order of path depth
     paths = sorted(
         find_directories(root) + find_files(root),
         key=lambda p: len(p.parts),
@@ -54,6 +77,7 @@ def replace_placeholders_in_paths(
         for placeholder, value in placeholders.items():
             new_name = new_name.replace(placeholder, value)
 
+        # Rename path if filename/directory name was modified
         if new_name != path.name:
             rename_path(path, path.with_name(new_name))
 
@@ -63,8 +87,16 @@ def replace_all(
     placeholders: dict[str, str],
 ) -> None:
     """
-    Replace placeholders in both paths and file contents.
-    """
+    Execute placeholder replacement on both file paths and file contents.
 
+    Parameters
+    ----------
+    root : Path
+        Root path of the scaffolded project directory.
+    placeholders : dict[str, str]
+        Dictionary mapping placeholder key strings to replacement values.
+    """
+    # First rename paths containing placeholder tokens
     replace_placeholders_in_paths(root, placeholders)
+    # Next substitute placeholder strings inside file text content
     replace_placeholders_in_content(root, placeholders)

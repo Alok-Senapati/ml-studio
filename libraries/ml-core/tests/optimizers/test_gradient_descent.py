@@ -1,11 +1,15 @@
-import numpy as np
-import pytest
+"""
+Unit tests for the gradient descent optimization function.
+"""
 
+from __future__ import annotations
+
+import numpy as np
 from ml_core.optimizers.gradient_descent import gradient_descent
 
 
-def test_gradient_descent_basic_update():
-    """Test basic gradient descent parameter update."""
+def test_gradient_descent_basic_update() -> None:
+    """Test standard gradient descent parameter update equations."""
     weights = np.array([1.0, 2.0, 3.0])
     bias = 0.5
     dw = np.array([0.1, 0.2, 0.3])
@@ -21,8 +25,8 @@ def test_gradient_descent_basic_update():
     assert np.isclose(bias_updated, expected_bias)
 
 
-def test_gradient_descent_zero_gradients():
-    """Test gradient descent with zero gradients."""
+def test_gradient_descent_zero_gradients() -> None:
+    """Test parameter stability when loss gradients are zero."""
     weights = np.array([1.0, 2.0])
     bias = 0.5
     dw = np.array([0.0, 0.0])
@@ -35,8 +39,8 @@ def test_gradient_descent_zero_gradients():
     assert np.isclose(bias_updated, bias)
 
 
-def test_gradient_descent_single_weight():
-    """Test gradient descent with single weight."""
+def test_gradient_descent_single_weight() -> None:
+    """Test gradient descent update with a single 1D weight element."""
     weights = np.array([2.0])
     bias = 1.0
     dw = np.array([0.5])
@@ -52,8 +56,8 @@ def test_gradient_descent_single_weight():
     assert np.isclose(bias_updated, expected_b)
 
 
-def test_gradient_descent_high_learning_rate():
-    """Test gradient descent with high learning rate."""
+def test_gradient_descent_high_learning_rate() -> None:
+    """Test gradient descent step behavior under a large learning rate (alpha=0.5)."""
     weights = np.array([1.0, 1.0])
     bias = 1.0
     dw = np.array([1.0, 1.0])
@@ -69,8 +73,8 @@ def test_gradient_descent_high_learning_rate():
     assert np.isclose(bias_updated, expected_bias)
 
 
-def test_gradient_descent_low_learning_rate():
-    """Test gradient descent with low learning rate."""
+def test_gradient_descent_low_learning_rate() -> None:
+    """Test gradient descent step behavior under a small learning rate (alpha=0.001)."""
     weights = np.array([1.0, 1.0])
     bias = 1.0
     dw = np.array([1.0, 1.0])
@@ -86,8 +90,8 @@ def test_gradient_descent_low_learning_rate():
     assert np.isclose(bias_updated, expected_bias)
 
 
-def test_gradient_descent_zero_learning_rate():
-    """Test gradient descent with zero learning rate."""
+def test_gradient_descent_zero_learning_rate() -> None:
+    """Test that zero learning rate (alpha=0.0) leaves parameters unchanged."""
     weights = np.array([1.0, 2.0])
     bias = 0.5
     dw = np.array([0.1, 0.2])
@@ -100,8 +104,8 @@ def test_gradient_descent_zero_learning_rate():
     assert np.isclose(bias_updated, bias)
 
 
-def test_gradient_descent_positive_gradients():
-    """Test gradient descent decreases parameters with positive gradients."""
+def test_gradient_descent_positive_gradients() -> None:
+    """Test that positive gradients cause parameters to decrease."""
     weights = np.array([1.0, 2.0])
     bias = 0.5
     dw = np.array([0.1, 0.2])
@@ -110,13 +114,12 @@ def test_gradient_descent_positive_gradients():
 
     weights_updated, bias_updated = gradient_descent(weights, bias, dw, db, learning_rate)
 
-    # Should decrease when gradients are positive
     assert all(weights_updated < weights)
     assert bias_updated < bias
 
 
-def test_gradient_descent_negative_gradients():
-    """Test gradient descent increases parameters with negative gradients."""
+def test_gradient_descent_negative_gradients() -> None:
+    """Test that negative gradients cause parameters to increase."""
     weights = np.array([1.0, 2.0])
     bias = 0.5
     dw = np.array([-0.1, -0.2])
@@ -125,13 +128,12 @@ def test_gradient_descent_negative_gradients():
 
     weights_updated, bias_updated = gradient_descent(weights, bias, dw, db, learning_rate)
 
-    # Should increase when gradients are negative
     assert all(weights_updated > weights)
     assert bias_updated > bias
 
 
-def test_gradient_descent_mixed_gradients():
-    """Test gradient descent with mixed positive/negative gradients."""
+def test_gradient_descent_mixed_gradients() -> None:
+    """Test parameter update behavior with mixed positive and negative gradients."""
     weights = np.array([1.0, 2.0, 3.0])
     bias = 1.0
     dw = np.array([0.1, -0.2, 0.3])
@@ -148,8 +150,8 @@ def test_gradient_descent_mixed_gradients():
     assert weights_updated[2] < weights[2]
 
 
-def test_gradient_descent_return_types():
-    """Test gradient descent returns correct types."""
+def test_gradient_descent_return_types() -> None:
+    """Test that gradient descent returns NumPy array weights and float bias."""
     weights = np.array([1.0, 2.0])
     bias = 0.5
     dw = np.array([0.1, 0.2])
@@ -162,8 +164,8 @@ def test_gradient_descent_return_types():
     assert isinstance(bias_updated, (float, np.floating))
 
 
-def test_gradient_descent_weights_shape_preserved():
-    """Test gradient descent preserves weights shape."""
+def test_gradient_descent_weights_shape_preserved() -> None:
+    """Test that gradient descent preserves input weight array shape."""
     weights = np.array([[1.0, 2.0], [3.0, 4.0]])
     bias = 0.5
     dw = np.array([[0.1, 0.2], [0.3, 0.4]])
@@ -175,13 +177,12 @@ def test_gradient_descent_weights_shape_preserved():
     assert weights_updated.shape == weights.shape
 
 
-def test_gradient_descent_multiple_iterations():
-    """Test gradient descent over multiple iterations."""
+def test_gradient_descent_multiple_iterations() -> None:
+    """Test parameter trajectory over multiple iterative gradient descent steps."""
     weights = np.array([5.0, 5.0])
     bias = 5.0
     learning_rate = 0.1
 
-    # Simulate multiple iterations with same gradient
     dw = np.array([1.0, 1.0])
     db = 1.0
 
@@ -196,18 +197,16 @@ def test_gradient_descent_multiple_iterations():
     assert np.isclose(bias, expected_bias)
 
 
-def test_gradient_descent_converges_to_minimum():
-    """Test gradient descent moves toward minimum."""
+def test_gradient_descent_converges_to_minimum() -> None:
+    """Test that iterative gradient descent reduces total parameter norm towards local minimum."""
     weights = np.array([10.0])
     bias = 10.0
     dw = np.array([2.0])
     db = 2.0
     learning_rate = 0.01
 
-    # Store initial loss approximation (weights^2)
     initial_loss = weights[0] ** 2 + bias**2
 
-    # Run a few iterations
     for _ in range(100):
         weights, bias = gradient_descent(weights, bias, dw, db, learning_rate)
 
@@ -215,8 +214,8 @@ def test_gradient_descent_converges_to_minimum():
     assert final_loss < initial_loss
 
 
-def test_gradient_descent_large_weights():
-    """Test gradient descent with large weight values."""
+def test_gradient_descent_large_weights() -> None:
+    """Test gradient descent numerical stability when operating on large weight values."""
     weights = np.array([1e6, 1e6])
     bias = 1e6
     dw = np.array([1.0, 1.0])
@@ -229,8 +228,8 @@ def test_gradient_descent_large_weights():
     assert np.isfinite(bias_updated)
 
 
-def test_gradient_descent_very_small_learning_rate():
-    """Test gradient descent with very small learning rate."""
+def test_gradient_descent_very_small_learning_rate() -> None:
+    """Test gradient descent step behavior under extremely small learning rates."""
     weights = np.array([1.0])
     bias = 1.0
     dw = np.array([1.0])
@@ -239,13 +238,12 @@ def test_gradient_descent_very_small_learning_rate():
 
     weights_updated, bias_updated = gradient_descent(weights, bias, dw, db, learning_rate)
 
-    # Changes should be very small
     assert np.isclose(weights_updated[0], weights[0], atol=1e-8)
     assert np.isclose(bias_updated, bias, atol=1e-8)
 
 
-def test_gradient_descent_high_dimensional():
-    """Test gradient descent with high-dimensional weights."""
+def test_gradient_descent_high_dimensional() -> None:
+    """Test gradient descent execution on high-dimensional weight arrays."""
     weights = np.random.randn(100)
     bias = 1.0
     dw = np.random.randn(100)

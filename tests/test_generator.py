@@ -1,11 +1,19 @@
+"""
+Unit tests for project generation orchestration and cleanup error handling.
+"""
+
+from __future__ import annotations
+
 from pathlib import Path
+from typing import Any
 
 import pytest
 
 from ml_studio.project.generator import generate_project
 
 
-def test_generate_project(monkeypatch, tmp_path: Path) -> None:
+def test_generate_project(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    """Test standard project scaffolding from template files."""
     template = tmp_path / "template"
     projects = tmp_path / "projects"
 
@@ -16,7 +24,7 @@ def test_generate_project(monkeypatch, tmp_path: Path) -> None:
     project_dir.mkdir()
 
     readme = project_dir / "README.md"
-    readme.write_text("__PROJECT_NAME__\n__PROJECT_DESCRIPTION__")
+    readme.write_text("__PROJECT_NAME__\n__PROJECT_DESCRIPTION__", encoding="utf-8")
 
     monkeypatch.setattr(
         "ml_studio.project.generator.TEMPLATE_DIR",
@@ -36,12 +44,13 @@ def test_generate_project(monkeypatch, tmp_path: Path) -> None:
     assert output.exists()
     assert output.name == "customer_churn"
 
-    content = (output / "customer_churn" / "README.md").read_text()
+    content = (output / "customer_churn" / "README.md").read_text(encoding="utf-8")
 
     assert "customer_churn" in content
 
 
-def test_generate_project_cleanup_on_error(monkeypatch, tmp_path: Path) -> None:
+def test_generate_project_cleanup_on_error(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    """Test automatic cleanup of destination directory if scaffolding fails."""
     template = tmp_path / "template"
     projects = tmp_path / "projects"
 
@@ -58,8 +67,8 @@ def test_generate_project_cleanup_on_error(monkeypatch, tmp_path: Path) -> None:
         projects,
     )
 
-    # make copy_directory raise after creating destination to simulate error
-    def fake_copy_directory(src, dst):
+    # Mock copy_directory to simulate an unexpected error midway through generation
+    def fake_copy_directory(src: Path, dst: Path) -> None:
         dst.mkdir()
         raise RuntimeError("copy failed")
 
@@ -68,11 +77,14 @@ def test_generate_project_cleanup_on_error(monkeypatch, tmp_path: Path) -> None:
     with pytest.raises(RuntimeError):
         generate_project(project_name="x", project_description="d")
 
-    # destination should be removed by cleanup
+    # Assert that destination directory was cleaned up upon failure
     assert not (projects / "x").exists()
 
 
-def test_generate_project_sync_calls_sync_dependencies(monkeypatch, tmp_path: Path) -> None:
+def test_generate_project_sync_calls_sync_dependencies(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Test that sync=True triggers dependency installation via uv."""
     template = tmp_path / "template"
     projects = tmp_path / "projects"
 
@@ -89,15 +101,14 @@ def test_generate_project_sync_calls_sync_dependencies(monkeypatch, tmp_path: Pa
         projects,
     )
 
-    # fake copy_directory that creates destination
-    def fake_copy_directory(src, dst):
+    def fake_copy_directory(src: Path, dst: Path) -> None:
         dst.mkdir()
 
     monkeypatch.setattr("ml_studio.project.generator.copy_directory", fake_copy_directory)
 
-    called = {"sync": False}
+    called: dict[str, Any] = {"sync": False}
 
-    def fake_sync(dest):
+    def fake_sync(dest: Path) -> None:
         called["sync"] = True
 
     monkeypatch.setattr("ml_studio.project.generator.sync_dependencies", fake_sync)

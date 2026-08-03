@@ -1,0 +1,11 @@
+"""
+__PROJECT_NAME__: __PROJECT_DESCRIPTION__
+"""
+
+from __future__ import annotations
+
+from .__version__ import __version__
+
+__all__ = [
+    "__version__",
+]

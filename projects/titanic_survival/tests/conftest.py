@@ -1,10 +1,24 @@
+"""
+Pytest fixtures and sample data generators for titanic_survival test suites.
+"""
+
+from __future__ import annotations
+
 import numpy as np
 import pandas as pd
 import pytest
 
 
 @pytest.fixture
-def sample_training_data():
+def sample_training_data() -> pd.DataFrame:
+    """
+    Generate a representative DataFrame containing raw sample Titanic passenger data.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with standard Titanic dataset schema columns.
+    """
     return pd.DataFrame(
         {
             "PassengerId": [1, 2, 3, 4, 5, 6],
@@ -26,12 +40,12 @@ def sample_training_data():
                 "male",
             ],
             "Age": [
-                22,
-                38,
+                22.0,
+                38.0,
                 np.nan,
-                35,
-                35,
-                28,
+                35.0,
+                35.0,
+                28.0,
             ],
             "SibSp": [1, 1, 0, 1, 0, 0],
             "Parch": [0, 0, 0, 0, 0, 0],
@@ -72,14 +86,13 @@ def sample_training_data():
 
 
 @pytest.fixture
-def sample_training_labels():
-    return np.array(
-        [
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-        ]
-    )
+def sample_training_labels() -> np.ndarray:
+    """
+    Generate ground truth binary survival target labels matching sample dataset.
+
+    Returns
+    -------
+    np.ndarray
+        Array of binary target values (0 = did not survive, 1 = survived).
+    """
+    return np.array([0, 1, 1, 1, 0, 0], dtype=np.int64)

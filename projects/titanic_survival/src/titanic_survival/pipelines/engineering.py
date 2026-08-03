@@ -1,14 +1,21 @@
+"""
+Feature engineering scikit-learn pipeline for titanic_survival.
+"""
+
+from __future__ import annotations
+
 from sklearn.pipeline import Pipeline
 
 from titanic_survival.features.engineering import (
-    TitleExtractor,
+    DeckExtractor,
     FamilySizeCreator,
     IsAloneCreator,
-    DeckExtractor,
     TicketGroupSizeCreator,
     TicketPrefixExtractor,
+    TitleExtractor,
 )
 
+#: Sequential pipeline executing custom feature extraction and transformation steps
 feature_engineering_pipeline = Pipeline(
     steps=[
         ("title_extractor", TitleExtractor()),
