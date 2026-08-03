@@ -114,13 +114,13 @@ def test_check_binary_labels_valid_0_1():
 
 def test_check_binary_labels_single_class():
     """Test binary labels with single class passes."""
-    y = np.array([1, 1, 1])
+    y = np.array([1, 1, 1.0])
     check_binary_labels(y)
 
 
 def test_check_binary_labels_only_zeros():
     """Test binary labels with only zeros."""
-    y = np.array([0, 0, 0])
+    y = np.array([0, 0, 0.0])
     check_binary_labels(y)
 
 

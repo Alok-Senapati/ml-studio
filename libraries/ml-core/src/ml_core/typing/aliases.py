@@ -3,10 +3,10 @@ from __future__ import annotations
 import numpy as np
 from numpy.typing import NDArray
 
-type NumericArray = NDArray[np.number]
-type FloatArray = NDArray[np.floating]
-type IntArray = NDArray[np.integer]
-type BoolArray = NDArray[np.bool_]
+NumericArray = NDArray[np.number]
+FloatArray = NDArray[np.floating]
+IntArray = NDArray[np.integer]
+BoolArray = NDArray[np.bool_]
 
 __all__ = [
     "NumericArray",

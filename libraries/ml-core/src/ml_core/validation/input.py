@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from ml_core.typing import NumericArray
+from ml_core.typing import NumericArray, FloatArray
 
 
 def check_feature_matrix(X: NumericArray) -> None:

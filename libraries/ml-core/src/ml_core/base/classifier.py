@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import abstractmethod
 
 from ml_core.base.estimator import Estimator
-from ml_core.typing import FloatArray, NumericArray
+from ml_core.typing import FloatArray, IntArray, NumericArray
 
 
 class Classifier(Estimator):
