@@ -1,6 +1,6 @@
-# Machne Learning Studio
+# Machine Learning Studio
 
-Machne Learning Studio is a layered Docker-based machine learning environment for local
+Machine Learning Studio is a layered Docker-based machine learning environment for local
 GPU development. It provides reusable images for Python, scientific computing,
 PyTorch, TensorFlow, JupyterLab, and MLflow, plus a small ML project template
 for starting new experiments quickly.
