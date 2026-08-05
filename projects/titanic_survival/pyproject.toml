@@ -17,6 +17,7 @@ dependencies = [
     "pydantic-settings>=2.10",
     "matplotlib>=3.11.0",
     "jupyter>=1.1.1",
+    "ml-core"
 ]
 
 [dependency-groups]
@@ -33,6 +34,9 @@ pythonpath = ["src"]
 
 [tool.uv]
 package = true
+
+[tool.uv.sources]
+ml-core = { workspace = true }
 
 [tool.ruff]
 line-length = 100

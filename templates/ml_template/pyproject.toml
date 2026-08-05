@@ -14,7 +14,8 @@ dependencies = [
     "pandas>=2.2",
     "pandas-stubs~=3.0.5",
     "scikit-learn>=1.6",
-    "pydantic-settings>=2.10"
+    "pydantic-settings>=2.10",
+    "ml-core"
 ]
 
 [dependency-groups]
@@ -31,6 +32,9 @@ pythonpath = ["src"]
 
 [tool.uv]
 package = true
+
+[tool.uv.sources]
+ml-core = { workspace = true }
 
 [tool.ruff]
 line-length = 100

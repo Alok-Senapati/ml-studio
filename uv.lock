@@ -2622,6 +2622,7 @@ source = { editable = "projects/titanic_survival" }
 dependencies = [
     { name = "jupyter" },
     { name = "matplotlib" },
+    { name = "ml-core" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "pandas-stubs" },
@@ -2641,6 +2642,7 @@ dev = [
 requires-dist = [
     { name = "jupyter", specifier = ">=1.1.1" },
     { name = "matplotlib", specifier = ">=3.11.0" },
+    { name = "ml-core", editable = "libraries/ml-core" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "pandas", specifier = ">=2.2" },
     { name = "pandas-stubs", specifier = "~=3.0.5" },
